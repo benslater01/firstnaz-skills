@@ -42,7 +42,17 @@
       "bold": "Invite your friends and family to our Christmas sermon series and Christmas Eve services!",
       "text": "Invite cards available in the lobby starting November 29th.",
       "link": null,
-      "until": "2026-12-24"
+      "until": "2026-12-24",
+      "images": [
+        {
+          "src": "https://assets.unlayer.com/projects/271054/1795193709571-1.png?w=960px",
+          "alt": "Christmas at FirstNaz"
+        },
+        {
+          "src": "https://assets.unlayer.com/projects/271054/1795193712796-2.png?w=960px",
+          "alt": "Christmas Eve services"
+        }
+      ]
     }
   ],
   "sermon": {
