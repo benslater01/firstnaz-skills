@@ -1,0 +1,58 @@
+{
+  "status": "sent",
+  "proofSentAt": null,
+  "sendDate": "2026-11-20",
+  "subject": "FirstNaz Weekly Guide",
+  "greeting": "Hi team,",
+  "intro": [
+    "What you do helps to move our church forward, and we don't take that for granted. You are prayed for each week and what you give each Sunday is not just volunteer hours but real ministry.",
+    "This weekly guide is here to keep you in the loop on what's coming up, what's happening across our church, and what you need to know to serve well. Thank you for being the hands and feet of FirstNaz."
+  ],
+  "signoff": [
+    "Blessings,",
+    "Ben Slater"
+  ],
+  "recurring": [
+    "Father’s Table Meal (Every Wednesday @ 5p)",
+    "Father’s Table Food Pantry (Every Wednesday @ 4p AND the 4th Saturday of the Month)"
+  ],
+  "upcoming": [
+    {
+      "date": "2026-12-13",
+      "label": "December 13",
+      "title": "Next Step U: SHAPEd for Ministry",
+      "detail": "(after 2nd & 3rd services)"
+    },
+    {
+      "date": "2026-12-13",
+      "label": "December 13",
+      "title": "Christmas Experience",
+      "detail": "(6p in the Gym)"
+    },
+    {
+      "date": "2026-12-24",
+      "label": "December 24",
+      "title": "Christmas Eve Services",
+      "detail": "(4p & 6p)"
+    }
+  ],
+  "calendarUrl": "https://www.firstnaz.net/events",
+  "seasonal": [
+    {
+      "bold": "Invite your friends and family to our Christmas sermon series and Christmas Eve services!",
+      "text": "Invite cards available in the lobby starting November 29th.",
+      "link": null,
+      "until": "2026-12-24"
+    }
+  ],
+  "sermon": {
+    "title": "Our Confidence is in Christ",
+    "videoId": "Gy8EfI_ZLrE",
+    "blurb": "Missed Sunday’s message? Catch up anytime and be encouraged by God’s Word. Listen online and stay connected to what God is doing in our church family."
+  },
+  "footer": [
+    "©2026 Mount Vernon FirstNaz",
+    "807 Coshocton Avenue, Mt Vernon, OH 43050",
+    "Don't want these emails? Just reply and let me know."
+  ]
+}
