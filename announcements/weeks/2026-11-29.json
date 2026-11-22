@@ -1,0 +1,66 @@
+{
+  "sunday": "2026-11-29",
+  "status": "draft",
+  "proposalSentAt": null,
+  "host": "Jadon Bird (Service Host in Planning Center)",
+  "options": [
+    {
+      "id": "A",
+      "title": "Christmas at the Movies",
+      "when": "Starts today, runs 4 Sundays",
+      "source": "Joe's sermon series email (Nov 17), Weekly Guide (invite cards from Nov 29)",
+      "why": "Series launch day and invite cards hit the lobby today. Best invite window of the year.",
+      "bullets": [
+        "Christmas movies you already love, with a twist.",
+        "Four Sundays: Polar Express, The Santa Clause, The Family Man, The Best Christmas Pageant Ever.",
+        "Each one points to something real. Hope. Purpose. What matters most.",
+        "Know someone who'd never come to church but loves these movies? This is the invite.",
+        "Grab a few invite cards in the lobby and hand one out this week."
+      ],
+      "flags": ["Joe's doc says \"The Greatest Christmas Pageant Ever.\" The movie is \"The Best Christmas Pageant Ever.\" I used the real title."]
+    },
+    {
+      "id": "B",
+      "title": "Christmas Experience",
+      "when": "Sunday, December 13, 6 PM",
+      "source": "Planning Center calendar, Weekly Guide, Christmas Experience slide",
+      "why": "Church-wide family event two weeks out. Good time to get it on calendars.",
+      "bullets": [
+        "Need one night this December that isn't shopping or wrapping?",
+        "Christmas Experience. Sunday, December 13, 6 PM, Family Life Center.",
+        "Bring the kids. Bring the grandparents. Bring the neighbors.",
+        "Put it in your phone right now. Then text it to one family."
+      ],
+      "flags": [
+        "I couldn't find what actually happens at the Christmas Experience. A one-liner on that would make this much stronger.",
+        "The slide says Family Life Center; the Weekly Guide says the Gym. Same room?"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Next Step U: SHAPEd for Ministry",
+      "when": "Sunday, December 13, after 2nd and 3rd services",
+      "source": "Connections calendar, Weekly Guide",
+      "why": "Sign-up class two weeks out. Could also wait a week and run Dec 6.",
+      "bullets": [
+        "Ever wonder what God actually wired you for?",
+        "SHAPEd for Ministry helps you find it. Your gifts, passions, personality, story.",
+        "One short class, right after service on December 13.",
+        "Sign up on the Next Steps form. QR code's right in front of you."
+      ]
+    }
+  ],
+  "skipped": [
+    "Hymn Sing (today, 9:40 AM): smaller group, better on the pre-service slides.",
+    "Christmas Eve services (Dec 24, 4 and 6 PM): too early to push on its own. Option A plants the invite.",
+    "Father's Table Pantry (Nov 28): happens before Sunday."
+  ],
+  "notes": [
+    "I couldn't find Sylvia's church newsletter in your inbox or OneDrive. Where does it live (sender, folder, or tool)? Until then I'm using the Weekly Guide, your connections calendar, Planning Center, your announcement slides and staff emails.",
+    "Final goes to Joe, Mark and Jadon, since Jadon is listed as Service Host this Sunday."
+  ],
+  "picked": [],
+  "final": [],
+  "sentAt": null,
+  "sentTo": []
+}
