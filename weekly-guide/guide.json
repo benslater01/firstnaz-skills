@@ -45,12 +45,14 @@
       "until": "2026-12-24",
       "images": [
         {
-          "src": "https://assets.unlayer.com/projects/271054/1795193709571-1.png?w=960px",
-          "alt": "Christmas at FirstNaz"
+          "src": "christmas-experience-2026.jpg",
+          "alt": "Christmas Experience, December 13, 6 PM, Family Life Center",
+          "until": "2026-12-13"
         },
         {
-          "src": "https://assets.unlayer.com/projects/271054/1795193712796-2.png?w=960px",
-          "alt": "Christmas Eve services"
+          "src": "christmas-eve-2026.jpg",
+          "alt": "Christmas Eve Services, December 24, 4:00 and 6:00 PM",
+          "until": "2026-12-24"
         }
       ]
     }

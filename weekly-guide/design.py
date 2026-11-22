@@ -115,6 +115,8 @@ def build(g, notes=None):
         if s.get("paragraphs"):
             r.append(text([e(p) for p in s["paragraphs"]]))
         for im in s.get("images", []):
+            if im.get("until") and date.fromisoformat(im["until"]) < today:
+                continue
             src = im["src"] if im["src"].startswith("https://") else IMG + im["src"]
             r.append(image(src, 480, im.get("href"), im.get("alt", "")))
         if s.get("link"):
