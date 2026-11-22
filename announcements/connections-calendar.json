@@ -1,0 +1,25 @@
+{
+  "note": "Ben's Connections/Hospitality calendar (Aug 2026 to Jul 2027). Each item is a candidate announcement. Ben can send an updated doc anytime; replace this file from it.",
+  "events": [
+    {"date": "2026-08-16", "title": "Welcome to FirstNaz Lunch"},
+    {"date": "2026-08-23", "title": "Next Step U: Life of Prayer"},
+    {"date": "2026-09-13", "title": "Church Membership Class", "detail": "Sunday after church (Fireside Room?)"},
+    {"date": "2026-09-20", "title": "Next Step U: Spiritual Habits"},
+    {"date": "2026-09-24", "title": "Volunteer Summit", "detail": "Evening training event, date flexible"},
+    {"date": "2026-10-11", "title": "Next Step U: Reading the Bible"},
+    {"date": "2026-11-08", "title": "Next Step U: Personal Evangelism"},
+    {"date": "2026-11-15", "title": "Welcome to FirstNaz Lunch"},
+    {"date": "2026-12-13", "title": "Next Step U: SHAPEd for Ministry"},
+    {"date": "2027-01-10", "title": "Next Step U: Baptism"},
+    {"date": "2027-01-21", "title": "Volunteer Summit", "detail": "Evening training event"},
+    {"date": "2027-02-21", "title": "Next Step U: Life of Prayer"},
+    {"date": "2027-03-07", "title": "Welcome to FirstNaz Lunch"},
+    {"date": "2027-03-14", "title": "Membership Class"},
+    {"date": "2027-03-21", "title": "Next Step U: Baptism"},
+    {"date": "2027-04-11", "title": "Next Step U: Reading the Bible"},
+    {"date": "2027-04-23", "title": "Volunteer Celebration", "detail": "Same timeframe as last year"},
+    {"date": "2027-05-16", "title": "Next Step U: Spiritual Habits"},
+    {"date": "2027-06-20", "title": "Next Step U: Personal Evangelism"},
+    {"date": "2027-07-18", "title": "Next Step U: SHAPEd for Ministry"}
+  ]
+}
