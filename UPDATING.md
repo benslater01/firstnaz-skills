@@ -12,13 +12,19 @@ Each week only `content.json` changes. `widget.js` holds the layout and should n
 5. Email Bslater@firstnaz.net a preview: the preview link, the sermon title, and every blank with its answer, so typos are easy to spot. Say it goes live Sunday 12:01 AM and that replying with corrections (or "hold") will be picked up.
 
 **Sunday 12:01 AM (go live)**
-1. Check Ben's inbox for replies to the preview email. Apply corrections to `preview/content.json`. If he wrote "hold", stop and email him that nothing was published.
+1. Check Ben's inbox. If he replied "hold", or a "which version?" question is unanswered, publish nothing and tell him. Apply any corrections he sent. If Ben himself emailed notes late Saturday (after the last preview), build from them and publish without a preview: he approved this exception. Late notes from Joe or Austin alone don't qualify; ask Ben instead.
 2. Copy the current `content.json` to `archive/<previous sermon date>.json`.
 3. Copy `preview/content.json` to `content.json`. Commit and push.
 4. Email Ben a short confirmation.
 
-**Saturday 12:47 PM and 7:47 PM (Austin's weeks and late notes)**
-When Joe isn't preaching, Austin sends notes Saturday morning. If he doesn't, Ben may email them in himself. Each run: if a preview already exists and nothing newer arrived, do nothing. If newer notes arrived, redo the Friday steps. If there are still no notes, email Ben a reminder (once per run, never guess content).
+**Saturday 12:47 PM and 7:47 PM (Austin's notes and late notes)**
+Austin always sends notes Saturday morning. Most weeks they duplicate Joe's Friday notes.
+- Same sermon and content as the preview: usual duplicate. Do nothing, no email.
+- Different sermon, or no preview yet: build the preview from them and email Ben.
+- Same sermon but real differences, or unclear which is for tomorrow: leave the preview alone and ask Ben which version ("Sermon notes: which version?"). One reminder on the evening run if unanswered.
+- No notes at all: remind Ben (midday, then a final evening reminder).
+
+**Never guess.** When anything is unclear, ask Ben a short, specific question by email.
 
 ## Formatting rules (from the original template)
 BLANKS
