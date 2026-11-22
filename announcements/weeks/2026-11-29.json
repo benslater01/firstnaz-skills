@@ -46,12 +46,11 @@
       "why": "Church-wide family event two weeks out. Good time to get it on calendars.",
       "bullets": [
         "Need one night this December that isn't shopping or wrapping?",
-        "Christmas Experience. Sunday, December 13, 6 PM.",
+        "Christmas Experience. Sunday, December 13, 6 PM, Family Life Center.",
         "Music, treats, hot drinks, the whole family in one room.",
         "Invite the neighbors. Easiest yes they'll give you all month."
       ],
       "flags": [
-        "The slide says Family Life Center; the Weekly Guide says the Gym. Same room? I left the room out.",
         "The newsletter also asks for cookie bakers (3 dozen, drop off Dec 11 or 13). Could be its own ask on Dec 6."
       ]
     },
@@ -84,5 +83,10 @@
   "picked": [],
   "final": [],
   "sentAt": null,
-  "sentTo": []
+  "sentTo": [],
+  "recommended": [
+    "A",
+    "B"
+  ],
+  "draftUrl": "https://firstnaz2-my.sharepoint.com/personal/bslater_firstnaz_net/_layouts/15/Doc.aspx?sourcedoc=%7B4CBD1516-B032-46CF-AC5A-FF57BA6F234F%7D&file=2026-11-29%20Sunday%20Announcements%20DRAFT.docx&action=default&mobileredirect=true"
 }

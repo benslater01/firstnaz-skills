@@ -4,6 +4,7 @@
   python3 build.py proposal weeks/<sunday>.json   > proposal.html   (email body to Ben)
   python3 build.py final    weeks/<sunday>.json   > final.html      (email body to Joe/Mark/host)
   python3 build.py docx     weeks/<sunday>.json   docs/<sunday>.docx
+  python3 build.py draft    weeks/<sunday>.json   draft.docx       (New Here + recommended picks, for the proposal)
 
 Week file: see GUIDE.md. "New Here" always comes from new-here.json and always runs first.
 HTML sticks to tags the Outlook connector allows (h2, h3, p, ul, li, b, i, hr, a).
@@ -45,6 +46,11 @@ def proposal(w):
            "New Here runs every week. Pick up to 2 more.</p>"]
     if w.get("host"):
         out.append(f"<p><b>Service host:</b> {e(w['host'])}</p>")
+    rec = w.get("recommended") or [o["id"] for o in w["options"][:2]]
+    if w.get("draftUrl"):
+        out.append(f"<p><b>Draft doc:</b> <a href=\"{w['draftUrl']}\">Sunday Announcements {short(w['sunday'])} (DRAFT)</a>. "
+                   f"That's exactly what goes out if you pick {' and '.join(rec)}. "
+                   "Your picks and edits replace it in the final.</p>")
     out.append("<hr><h2>Always: New Here</h2>")
     out.append(block(nh["title"], nh["bullets"]))
     out.append("<hr><h2>Options</h2>")
@@ -68,9 +74,14 @@ def proposal(w):
     return "".join(out)
 
 
-def final_blocks(w):
+def recommended(w):
+    ids = w.get("recommended") or [o["id"] for o in w["options"][:2]]
+    return [{"title": o["title"], "bullets": o["bullets"]} for o in w["options"] if o["id"] in ids]
+
+
+def final_blocks(w, draft=False):
     nh = new_here()
-    return [{"title": nh["title"], "bullets": nh["bullets"]}] + w["final"]
+    return [{"title": nh["title"], "bullets": nh["bullets"]}] + (recommended(w) if draft else w["final"])
 
 
 def final(w):
@@ -94,14 +105,14 @@ def set_bullet(p, num_id):
     ppr.append(num)
 
 
-def make_docx(w, out_path):
+def make_docx(w, out_path, draft=False):
     import docx
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     d = docx.Document(str(HERE / "template.docx"))
     t = d.add_paragraph()
     t.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    t.add_run(f"Sunday Announcements {short(w['sunday'])}").bold = True
-    for i, b in enumerate(final_blocks(w)):
+    t.add_run(f"Sunday Announcements {short(w['sunday'])}" + (" (DRAFT)" if draft else "")).bold = True
+    for i, b in enumerate(final_blocks(w, draft)):
         d.add_paragraph(b["title"])
         for line in b["bullets"]:
             p = d.add_paragraph(line, style="List Paragraph")
@@ -118,5 +129,7 @@ if __name__ == "__main__":
         print(final(w))
     elif mode == "docx":
         make_docx(w, sys.argv[3])
+    elif mode == "draft":
+        make_docx(w, sys.argv[3], draft=True)
     else:
         sys.exit("mode must be proposal, final or docx")
