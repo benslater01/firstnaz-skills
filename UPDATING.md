@@ -5,7 +5,7 @@ Each week only `content.json` changes. `widget.js` holds the layout and should n
 ## Weekly flow
 
 **Friday (prepare preview)**
-1. Search Bslater@firstnaz.net's Outlook for this week's notes: received since Thursday, from Pastor Joe (jproudfoot@firstnaz.net) or with "Sermon Notes" in the subject. Read the body and any attachment.
+1. Search Bslater@firstnaz.net's Outlook for this week's notes, received since Wednesday, from trusted senders only: Pastor Joe Proudfoot (jproudfoot@firstnaz.net), Austin Swallow Jr. (aswallow819@gmail.com), or Ben himself (Bslater@firstnaz.net) with "Sermon Notes" in the subject. Read the body and any attachment. If nothing yet, stop quietly.
 2. Write the new week into `preview/content.json` using the rules below. Do not touch `content.json`.
 3. Check `preview/index.html` renders in a browser with no console errors.
 4. Commit and push to `main`.
@@ -17,7 +17,8 @@ Each week only `content.json` changes. `widget.js` holds the layout and should n
 3. Copy `preview/content.json` to `content.json`. Commit and push.
 4. Email Ben a short confirmation.
 
-If no notes arrive by Saturday, email Ben instead of guessing.
+**Saturday 12:47 PM and 7:47 PM (Austin's weeks and late notes)**
+When Joe isn't preaching, Austin sends notes Saturday morning. If he doesn't, Ben may email them in himself. Each run: if a preview already exists and nothing newer arrived, do nothing. If newer notes arrived, redo the Friday steps. If there are still no notes, email Ben a reminder (once per run, never guess content).
 
 ## Formatting rules (from the original template)
 BLANKS
