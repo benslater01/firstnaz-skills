@@ -1,7 +1,7 @@
 {
   "sunday": "2026-11-29",
   "status": "proposed",
-  "proposalSentAt": "2026-11-22T16:05:00Z",
+  "proposalSentAt": "2026-11-22T16:30:00Z",
   "host": "Jadon Bird (Service Host in Planning Center)",
   "options": [
     {
@@ -23,23 +23,40 @@
     },
     {
       "id": "B",
-      "title": "Christmas Experience",
-      "when": "Sunday, December 13, 6 PM",
-      "source": "Planning Center calendar, Weekly Guide, Christmas Experience slide",
-      "why": "Church-wide family event two weeks out. Good time to get it on calendars.",
+      "title": "Turn the Tide Christmas gifts",
+      "when": "Tags out Nov 29 and Dec 6, gifts back by Sunday, December 13",
+      "source": "Church newsletter (Nov 21)",
+      "why": "Tags go out this Sunday. Knox County impact, whole church can do it.",
       "bullets": [
-        "Need one night this December that isn't shopping or wrapping?",
-        "Christmas Experience. Sunday, December 13, 6 PM, Family Life Center.",
-        "Bring the kids. Bring the grandparents. Bring the neighbors.",
-        "Put it in your phone right now. Then text it to one family."
+        "Some kids in our town won't get anything on their list this year. You can change that.",
+        "Grab a gift tag today. Every tag is a real kid's real wish.",
+        "Shop it, bring it back by December 13.",
+        "That's it. One tag, one kid, one Christmas morning."
       ],
       "flags": [
-        "I couldn't find what actually happens at the Christmas Experience. A one-liner on that would make this much stronger.",
-        "The slide says Family Life Center; the Weekly Guide says the Gym. Same room?"
+        "Where are the tags (Connection Center)? I left the location out.",
+        "The newsletter also mentions grocery bags for local students. I left that out to keep it to one ask. Add it if you want."
       ]
     },
     {
       "id": "C",
+      "title": "Christmas Experience",
+      "when": "Sunday, December 13, 6 PM",
+      "source": "Church newsletter, Planning Center calendar, Weekly Guide, Christmas Experience slide",
+      "why": "Church-wide family event two weeks out. Good time to get it on calendars.",
+      "bullets": [
+        "Need one night this December that isn't shopping or wrapping?",
+        "Christmas Experience. Sunday, December 13, 6 PM.",
+        "Music, treats, hot drinks, the whole family in one room.",
+        "Invite the neighbors. Easiest yes they'll give you all month."
+      ],
+      "flags": [
+        "The slide says Family Life Center; the Weekly Guide says the Gym. Same room? I left the room out.",
+        "The newsletter also asks for cookie bakers (3 dozen, drop off Dec 11 or 13). Could be its own ask on Dec 6."
+      ]
+    },
+    {
+      "id": "D",
       "title": "Next Step U: SHAPEd for Ministry",
       "when": "Sunday, December 13, after 2nd and 3rd services",
       "source": "Connections calendar, Weekly Guide",
@@ -53,13 +70,16 @@
     }
   ],
   "skipped": [
-    "Hymn Sing (today, 9:40 AM): smaller group, better on the pre-service slides.",
-    "Christmas Eve services (Dec 24, 4 and 6 PM): too early to push on its own. Option A plants the invite.",
+    "Hymn Sing (Nov 29, 9:40 AM, Fireside Room): smaller group, better on the pre-service slides.",
+    "Christmas Eve services (Dec 24, 4 and 6 PM): too early to push alone. Option A plants the invite.",
+    "Prime Time Christmas Dinner (Dec 6, ages 55+) and Women's Ministry Christmas Party (Dec 10): one group each, bulletin and newsletter.",
+    "Salvation Army Red Kettle bell ringers (Dec 10 and 17) and Christmas Experience cookie bakers: better fits for Dec 6.",
     "Father's Table Pantry (Nov 28): happens before Sunday."
   ],
   "notes": [
-    "I couldn't find Sylvia's church newsletter in your inbox or OneDrive. Where does it live (sender, folder, or tool)? Until then I'm using the Weekly Guide, your connections calendar, Planning Center, your announcement slides and staff emails.",
-    "Final goes to Joe, Mark and Jadon, since Jadon is listed as Service Host this Sunday."
+    "Found the newsletter (from churchoffice@, \"What's Happening at FirstNaz?\"). It's now a weekly source, including when it's in Deleted Items.",
+    "Jadon is Service Host this Sunday. He isn't on the staff page (it doesn't list anyone right now). Is his email jbird@firstnaz.net?",
+    "v2 sent (added Turn the Tide, Christmas Experience details). Ben should reply to the v2 email; also accept a reply to v1."
   ],
   "picked": [],
   "final": [],

@@ -37,7 +37,7 @@ Target Sunday = the coming Sunday.
 2. Gather candidates for the target Sunday. Look roughly 1 to 4 weeks ahead:
    - **Planning Center calendar**: `calendar_event_instances`, approved, next 6 weeks. Skip weekly services, youth, preteens, small groups, hot meal, safety team, and other recurring or subgroup items unless something about them is new.
    - **Weekly Guide**: `../weekly-guide/guide.json` (upcoming + seasonal), and the latest proof notes if any.
-   - **Church newsletter (Sylvia Cook)**: search Ben's Outlook for the newest email newsletter (sender scook@firstnaz.net, or subject/body containing "newsletter") from the last 2 weeks. If you can't find it, say so in `notes` (once is enough; don't repeat every week if Ben has answered).
+   - **Church newsletter (Sylvia Cook, Mailchimp)**: sent from churchoffice@firstnaz.net at some point in the week, usually titled "Church Newsletter" (special editions have other subjects), body starts "What's Happening at FirstNaz?". **Ben usually deletes it**, so search all folders including Deleted Items (sender churchoffice@firstnaz.net, last 10 days) and read the newest one or two. This is often the richest source of dates and details.
    - **Connections calendar**: `connections-calendar.json`.
    - **Announcement requests**: emails to Ben in the last 2 weeks asking for a Sunday announcement or slide (search "announcement", "announce", "slide", "Sunday"). Per policy, requests need 4 days' notice; mention late ones.
    - **Staff emails**: sermon series, big news from Joe (jproudfoot@firstnaz.net) or Mark (mowen@firstnaz.net).
@@ -45,6 +45,14 @@ Target Sunday = the coming Sunday.
 3. Filter with the policy in STYLE.md (half the church, or a core ministry). Drop anything that happens before the target Sunday. Rank by: launches/happens this Sunday > needs sign-ups soon > church-wide event 1 to 3 weeks out > everything else.
 4. Draft **3 to 5 options** (A, B, C...) following STYLE.md exactly. Each gets when/source/why. Put anything uncertain in `flags` (conflicting rooms, missing details, typos in source names). Never invent details. List what you looked at and skipped in `skipped`.
 5. **Service host**: Planning Center Services, service type "Weekend Services" (id 83785). Find the plan for the target Sunday (services_plans) and its roster (services_plan_people, include person). Anyone with position "Service Host" who is not Ben (Benjamin Slater) is a host. Put their name(s) in `host`. If there's no host or only Ben, set `host` to null.
+   Then find each host's email (see **Host emails** below). If you can't, ask Ben for it in `notes` ("Jadon is hosting. What's his email?").
+
+## Host emails
+Ben's rule: use the church staff page, and if the email isn't there, ask Ben. Don't guess and don't pull it from Planning Center or old emails.
+1. **Saved answers**: Ben's OneDrive file `Weekly Guide/announcement-hosts.json` (drive id in ../weekly-guide/GUIDE.md, Weekly Guide folder id `01JV6PCJKDHZHOBLH3E5EI7ZY4RPEJXLUA`). Shape: `{"Jadon Bird": "x@y"}`. Read it with read_resource; it may not exist yet.
+2. **Staff page**: https://www.firstnaz.net/staff-leaders. It renders with JavaScript, so load it in Playwright (preinstalled), scroll to the bottom, and read the text and `mailto:` links. Match the host by full name. (As of Nov 2026 the page lists no staff, only churchoffice@. Check anyway; it may be filled in later.)
+3. **Ask Ben** in the proposal `notes`. When he answers, save it to `announcement-hosts.json` (create with sharepoint_upload_file, or update it with sharepoint_update_file) so you never ask twice. Never put host emails in this repo.
+On Friday, if a host's email is still unknown: send to Joe and Mark anyway (with Ben CC'd), and tell Ben in one line that the host wasn't included because you don't have their email.
 6. Write the week file with `status: "draft"`, build the email with `python3 build.py proposal weeks/<sunday>.json`, and send it to Bslater@firstnaz.net only with outlook_send_mail (bodyType html). Subject: `Announcements <M.D>: pick your 2`. Set `status: "proposed"` and `proposalSentAt`. Commit "Announcements proposal: <sunday>" and push.
 
 ## Friday: build and send the final (about 12:47 PM and 4:47 PM Eastern)
@@ -56,7 +64,7 @@ Target Sunday = the coming Sunday.
    - `final` = those options' title and bullets, with his edits applied exactly. If he wrote his own wording, use it as written (just tidy into bullets; don't "improve" it). If he added something new, write it per STYLE.md.
    - If he answered a flag, fix the bullets to match.
    - If he picked nothing extra ("just New Here"), `final` is empty.
-   - Recipients: Joe Proudfoot and Mark Owen, plus each host in `host`. Re-check the Service Host in Planning Center now (it can change during the week). Get each host's email from Planning Center (people_search, include emails, primary). Don't commit emails.
+   - Recipients: Joe Proudfoot (jproudfoot@firstnaz.net) and Mark Owen (mowen@firstnaz.net), plus each host in `host`. Re-check the Service Host in Planning Center now (it can change during the week). Get host emails per **Host emails** (saved answers, staff page, or Ben's reply to the proposal; save new answers). Don't commit emails.
    - Build the doc: `python3 build.py docx weeks/<sunday>.json docs/<sunday>.docx`.
    - Build the email: `python3 build.py final weeks/<sunday>.json`. Send with outlook_send_mail (bodyType html) to those recipients, Ben in CC. Subject: `<M.D> Announcements`.
    - Set `status: "sent"`, `sentAt`, `sentTo` (names only). Commit "Announcements sent: <sunday>" and push (the doc link goes live when it's on main).
