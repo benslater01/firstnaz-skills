@@ -1,4 +1,13 @@
+---
+name: sermon-notes
+description: Weekly interactive sermon notes for firstnaz.net/sermon-notes: build the Friday preview from Joe/Austin/Ben notes in Outlook, handle Saturday duplicates, publish Sunday 12:01 AM.
+---
+
 # Weekly sermon notes update
+
+All paths below are relative to this `sermon-notes/` folder (repo: benslater01/firstnaz-skills).
+- Live page: https://www.firstnaz.net/sermon-notes (embeds https://benslater01.github.io/firstnaz-skills/sermon-notes/widget.js)
+- Preview link for Ben: https://benslater01.github.io/firstnaz-skills/sermon-notes/preview/
 
 Each week only `content.json` changes. `widget.js` holds the layout and should not need edits.
 

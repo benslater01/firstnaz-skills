@@ -6,7 +6,7 @@
   python3 build.py docx     weeks/<sunday>.json   docs/<sunday>.docx
   python3 build.py draft    weeks/<sunday>.json   draft.docx       (New Here + recommended picks, for the proposal)
 
-Week file: see GUIDE.md. "New Here" always comes from new-here.json and always runs first.
+Week file: see SKILL.md. "New Here" always comes from new-here.json and always runs first.
 HTML sticks to tags the Outlook connector allows (h2, h3, p, ul, li, b, i, hr, a).
 """
 import copy, html, json, sys
@@ -14,7 +14,7 @@ from datetime import date
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PAGES = "https://benslater01.github.io/sermon-notes/announcements/docs/"
+PAGES = "https://benslater01.github.io/firstnaz-skills/announcements/docs/"
 
 
 def e(s):

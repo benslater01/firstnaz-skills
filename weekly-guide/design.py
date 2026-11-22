@@ -17,7 +17,7 @@ import html, json, sys
 from datetime import date
 
 BEN = "Bslater@firstnaz.net"
-IMG = "https://benslater01.github.io/sermon-notes/weekly-guide/img/"
+IMG = "https://benslater01.github.io/firstnaz-skills/weekly-guide/img/"
 LOGO = IMG + "logo-1n.png"
 FONT = "arial,helvetica,sans-serif"
 HEAVY = "'arial black',AvenirNext-Heavy,'avant garde',arial"

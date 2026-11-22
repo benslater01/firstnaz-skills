@@ -1,3 +1,8 @@
+---
+name: announcements
+description: Sunday morning announcements: Tuesday options + proposal to Ben, Friday final (New Here plus up to 2) to Joe, Mark and any alternate service host.
+---
+
 # Sunday Announcements
 
 Ben Slater (Bslater@firstnaz.net) writes an outlined announcement guide for each Sunday. Every week: **New Here** (permanent, always first) plus **up to 2** more. Ben picks the extras; this automation finds the options, drafts them, and sends the final once he approves.
@@ -10,7 +15,7 @@ Files:
 - `weeks/<sunday>.json`: one file per Sunday (state + options + final).
 - `build.py`: builds the proposal email, the final email, and the Word doc.
 - `template.docx`: styles from Ben's original Weekly Announcements doc.
-- `docs/<sunday>.docx`: the Word version, served at https://benslater01.github.io/sermon-notes/announcements/docs/<sunday>.docx (live once it's on main).
+- `docs/<sunday>.docx`: the Word version, served at https://benslater01.github.io/firstnaz-skills/announcements/docs/<sunday>.docx (live once it's on main).
 
 **This repo is public.** Never commit email addresses. Names of staff and the service host are fine.
 
@@ -49,11 +54,11 @@ Target Sunday = the coming Sunday.
 
 ## Host emails
 Ben's rule: use the church staff page, and if the email isn't there, ask Ben. Don't guess and don't pull it from Planning Center or old emails.
-1. **Saved answers**: Ben's OneDrive file `Weekly Guide/announcement-hosts.json` (drive id in ../weekly-guide/GUIDE.md, Weekly Guide folder id `01JV6PCJKDHZHOBLH3E5EI7ZY4RPEJXLUA`). Shape: `{"Jadon Bird": "x@y"}`. Read it with read_resource; it may not exist yet.
+1. **Saved answers**: Ben's OneDrive file `Weekly Guide/announcement-hosts.json` (drive id in ../weekly-guide/SKILL.md, Weekly Guide folder id `01JV6PCJKDHZHOBLH3E5EI7ZY4RPEJXLUA`). Shape: `{"Jadon Bird": "x@y"}`. Read it with read_resource; it may not exist yet.
 2. **Staff page**: https://www.firstnaz.net/staff-leaders. It renders with JavaScript, so load it in Playwright (preinstalled), scroll to the bottom, and read the text and `mailto:` links. Match the host by full name. (As of Nov 2026 the page lists no staff, only churchoffice@. Check anyway; it may be filled in later.)
 3. **Ask Ben** in the proposal `notes`. When he answers, save it to `announcement-hosts.json` (create with sharepoint_upload_file, or update it with sharepoint_update_file) so you never ask twice. Never put host emails in this repo.
 On Friday, if a host's email is still unknown: send to Joe and Mark anyway (with Ben CC'd), and tell Ben in one line that the host wasn't included because you don't have their email.
-6. **Draft doc.** Set `recommended` to your top 2 option ids (usually A and B). Build it with `python3 build.py draft weeks/<sunday>.json <scratchpad>/draft.docx`. Upload it to Ben's OneDrive folder **Sunday Announcements** (drive id in ../weekly-guide/GUIDE.md, folder id `01JV6PCJKOXZC5LMZMWFFZVA722LSL4VEP`) as `<sunday> Sunday Announcements DRAFT.docx` (sharepoint_upload_file, contentBase64, conflictBehavior "replace"). Put the returned webUrl in `draftUrl`. The proposal email links it automatically. (Outlook here can't attach files, so it's a link.)
+6. **Draft doc.** Set `recommended` to your top 2 option ids (usually A and B). Build it with `python3 build.py draft weeks/<sunday>.json <scratchpad>/draft.docx`. Upload it to Ben's OneDrive folder **Sunday Announcements** (drive id in ../weekly-guide/SKILL.md, folder id `01JV6PCJKOXZC5LMZMWFFZVA722LSL4VEP`) as `<sunday> Sunday Announcements DRAFT.docx` (sharepoint_upload_file, contentBase64, conflictBehavior "replace"). Put the returned webUrl in `draftUrl`. The proposal email links it automatically. (Outlook here can't attach files, so it's a link.)
 7. Write the week file with `status: "draft"`, build the email with `python3 build.py proposal weeks/<sunday>.json`, and send it to Bslater@firstnaz.net only with outlook_send_mail (bodyType html). Subject: `Announcements <M.D>: pick your 2`. Set `status: "proposed"` and `proposalSentAt`. Commit "Announcements proposal: <sunday>" and push.
 
 ## Friday: build and send the final (about 12:47 PM and 4:47 PM Eastern)

@@ -6,7 +6,7 @@
 Images come from Ben's OneDrive (Master Media/Slides, Sermon Graphics,
 Logos): read the file with the Microsoft 365 read_resource tool, which saves
 the original to a local file, then run this on that file. Output is served
-publicly at https://benslater01.github.io/sermon-notes/weekly-guide/img/<name>
+publicly at https://benslater01.github.io/firstnaz-skills/weekly-guide/img/<name>
 once pushed to main. Only use church graphics meant for the public.
 """
 import os, sys
@@ -25,4 +25,4 @@ if name.lower().endswith((".jpg", ".jpeg")):
 else:
     im.save(out, optimize=True)
 print(out, im.size, os.path.getsize(out), "bytes")
-print("URL: https://benslater01.github.io/sermon-notes/weekly-guide/img/" + name)
+print("URL: https://benslater01.github.io/firstnaz-skills/weekly-guide/img/" + name)
