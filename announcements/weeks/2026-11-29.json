@@ -1,7 +1,7 @@
 {
   "sunday": "2026-11-29",
-  "status": "draft",
-  "proposalSentAt": null,
+  "status": "proposed",
+  "proposalSentAt": "2026-11-22T16:05:00Z",
   "host": "Jadon Bird (Service Host in Planning Center)",
   "options": [
     {
@@ -17,7 +17,9 @@
         "Know someone who'd never come to church but loves these movies? This is the invite.",
         "Grab a few invite cards in the lobby and hand one out this week."
       ],
-      "flags": ["Joe's doc says \"The Greatest Christmas Pageant Ever.\" The movie is \"The Best Christmas Pageant Ever.\" I used the real title."]
+      "flags": [
+        "Joe's doc says \"The Greatest Christmas Pageant Ever.\" The movie is \"The Best Christmas Pageant Ever.\" I used the real title."
+      ]
     },
     {
       "id": "B",
