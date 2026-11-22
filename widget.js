@@ -2,7 +2,9 @@
    The layout and behavior live here and rarely change.
    Each week's sermon lives in content.json next to this file. */
 (function () {
-  var script = document.currentScript;
+  var script = document.currentScript ||
+    document.querySelector('script[src*="sermon-notes/widget.js"]') ||
+    document.querySelector('script[src*="widget.js"]');
   var base = script.src.replace(/[^/]*$/, "");
   var root = document.getElementById("bb-week-root");
   if (!root) {
