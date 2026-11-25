@@ -487,8 +487,8 @@ def cmd_render(project, short=False, preview=False):
     fps = plan.get("fps", 30)
     tag = f"{key}{'_preview' if preview else ''}"
     tmp = work / f"render_{tag}"
-    if tmp.exists(): shutil.rmtree(tmp)
-    tmp.mkdir()
+    if tmp.exists(): shutil.rmtree(tmp, ignore_errors=True)
+    tmp.mkdir(exist_ok=True)
     # intermediates: near-lossless so the final encode is the only real generation
     enc = ["-c:v", "libx264", "-preset", "ultrafast" if preview else "veryfast", "-crf", "28" if preview else "12",
            "-pix_fmt", "yuv420p", "-r", str(fps)]
@@ -523,7 +523,7 @@ def cmd_render(project, short=False, preview=False):
         print(f"  segment {i+1}/{len(segs)} {ang} {hms(s['start'])}-{hms(s['end'])}", flush=True)
     if outro:
         d = CONFIG["brand"].get("outro_seconds", 4.0)
-        card(tmp / "outro.mov", W, H, fps, d, enc, CONFIG["brand"].get("outro_text")); clips.append(tmp / "outro.mov")
+        card(tmp / "outro.mov", W, H, fps, d, enc, sec.get("outro_text", CONFIG["brand"].get("outro_text"))); clips.append(tmp / "outro.mov")
     lst = tmp / "list.txt"
     lst.write_text("".join(f"file '{c.name}'\n" for c in clips))
     joined = tmp / "joined.mov"
@@ -587,7 +587,7 @@ def cmd_render(project, short=False, preview=False):
         fc.append("[0:v]null[vout]"); vlab = "vout"
     run(["ffmpeg", *inputs, "-filter_complex", ";".join(fc), "-map", f"[{vlab}]", "-map", "[aout]",
          *venc, "-c:a", "aac", "-b:a", "192k", "-t", f"{total:.3f}", final], quiet=False)
-    if not preview: shutil.rmtree(tmp)
+    if not preview: shutil.rmtree(tmp, ignore_errors=True)
     if credit and not preview:
         (out / "music-credit.txt").write_text(credit + "\n")
     if m and m.get("file") and not preview:

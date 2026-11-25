@@ -15,7 +15,6 @@
     {"title": "Gymnopedie No 1", "mood": ["reflective", "calm"], "energy": 1},
     {"title": "Prelude in C - BWV 846", "mood": ["calm", "warm"], "energy": 2},
     {"title": "Canon in D Major", "mood": ["warm", "joyful"], "energy": 2},
-    {"title": "Amazing Grace", "mood": ["warm", "reflective"], "energy": 2},
     {"title": "Ever Mindful", "mood": ["reflective", "somber"], "energy": 2},
     {"title": "Bittersweet", "mood": ["somber", "reflective"], "energy": 2},
     {"title": "Peaceful Desolation", "mood": ["somber", "cinematic"], "energy": 2},
