@@ -1,6 +1,6 @@
 ---
 name: video-edit
-description: Edit FirstNaz talking-head videos from raw camera files. Syncs two angles to the lav audio, matches color, cuts on the transcript, works in b-roll, adds ducked royalty-free music, logo intro/outro, name labels and captions, and renders a 1080p MP4 plus an optional vertical short with captions. Runs on Ben's Mac with free local tools.
+description: Edit FirstNaz talking-head videos from raw camera files on Ben's external drive. Syncs two angles to the lav audio, matches color, cuts on the transcript, works in b-roll, adds ducked royalty-free music, logo intro/outro, name labels and captions, and renders a 1080p MP4 plus an optional vertical short with captions. Runs on Ben's Mac with free local tools.
 ---
 
 # Video Edit
@@ -45,7 +45,7 @@ Keep chat short. Ben reads previews, not essays.
 4. **Transcribe.** `./edit transcribe <project>`. Read `work/transcript.txt` (this is the main thing you read; it's cheap).
 5. **Color.** `./edit color <project>`, then `./edit stills <project> 40 120` and look at `work/stills.jpg` once. If the graded B angle still looks off, nudge `angles.B.adjust`. If the brief asks for a look ("warmer"), put it in `look`. Simple adjustments only.
 6. **Plan the edit** in `plan.json` `main` (and `short` if wanted). Rules below. Then `./edit check <project>`.
-7. **Preview and approve.** `./edit render <project> --preview` (and `--short --preview`). Send Ben a short plan: length, what was cut, b-roll spots, music track, then the preview path(s). Wait for his go.
+7. **Preview and approve.** `./edit render <project> --preview` (and `--short --preview`). Send Ben a short plan: length, what was cut, b-roll spots, music track, then the preview path(s). Wait for his go on the cut. Music is Claude's call, not a question.
 8. **Final.** `./edit render <project>` and `./edit render <project> --short`. Tell Ben the `out/` paths. If the track needs attribution, the render writes `out/music-credit.txt`: remind him to paste it in the YouTube description.
 9. Revisions: change `plan.json`, re-render. Don't redo sync/transcribe.
 
@@ -70,7 +70,9 @@ Keep chat short. Ben reads previews, not essays.
 - Look at a b-roll clip only if its name doesn't tell you what it is (`./edit stills` doesn't cover b-roll; grab one frame with ffmpeg if needed).
 
 **Music.**
-- Default on under talking heads unless the brief says no. Pick from `music/library.json` by mood and energy that fits the brief. Don't reuse the same track as the last few projects unless Ben asks.
+- **Hands-off: Ben doesn't pick music.** Default on under talking heads unless the brief says no. Decide the `mood` (hopeful, reflective, calm, warm, joyful, upbeat, somber, cinematic) and `energy` (1 calm to 5 driving) from the brief and the transcript's tone, and write `"music": {"mood": "...", "energy": N}`. The render picks the best-fitting track he hasn't heard recently, pins it in plan.json, writes `out/music-credit.txt`, and records the use. Only name a `file` if Ben asks for a specific track.
+- Mention the track in the approval message in one line ("Music: Dreamer, hopeful piano"). Never ask Ben to choose. If he dislikes it, set a different mood/energy or `file` and re-render.
+- If the render notes there's no track for that mood, run `./edit music fetch <mood>` (adds a few Creative Commons tracks from Openverse) and render again. Prefer curated tracks: auto-fetched ones vary in quality and Claude can't listen to them, so only fetch when the library has nothing close.
 - Defaults: `gain_db: -14`, ducked under the voice so it swells in pauses, intro and outro. Raise toward -10 for upbeat recaps, drop to -18 for heavy testimony.
 - Use `start` to skip a slow intro in the track.
 - Only tracks whose license allows YouTube, Facebook and Instagram use.
@@ -114,19 +116,20 @@ All times are master-clock seconds, the same clock as the transcript.
       {"file": "/Users/.../broll/photo.jpg", "at": 47.0, "dur": 4}
     ],
     "lower_thirds": [{"at": 4.0, "dur": 5, "name": "Jane Smith", "title": "Member since 2019"}],
-    "music": {"file": "/Users/.../music/hopeful_piano.mp3", "gain_db": -14, "start": 0,
-              "fade_in": 1.5, "fade_out": 3, "duck": true, "credit": null}
+    "music": {"mood": "hopeful", "energy": 2, "gain_db": -14, "start": 0,
+              "fade_in": 1.5, "fade_out": 3, "duck": true}
   },
   "short": {
     "captions": true, "outro": false,
     "segments": [{"start": 60.2, "end": 78.0, "angle": "B", "crop_x": 0.4}],
-    "music": {"file": "/Users/.../music/hopeful_piano.mp3", "gain_db": -12}
+    "music": {"mood": "hopeful", "energy": 3, "gain_db": -12}
   }
 }
 ```
 
 - `offset`: source time = master time + offset (`sync` fills it in).
 - `color_match`: per channel [gain, offset] on 0 to 255 (`color` fills it in). `adjust`/`look`: brightness -0.1 to 0.1, contrast 0.9 to 1.1, saturation 0.9 to 1.2, gamma, warmth -1 to 1. Stay subtle.
+- `music`: `mood` + `energy` auto-picks; the render adds `file` (relative to `music/`) to pin it. Set `file` yourself only to force a track.
 - `broll.at` must land inside a kept segment. `src_in` is where to start inside the clip.
 
 ## Output
@@ -138,24 +141,27 @@ All times are master-clock seconds, the same clock as the transcript.
 
 ## Music library
 
-`FirstNaz Video/music/` on the drive. Drop tracks in, run `./edit music --scan`, then tag each new entry in `library.json`: `mood` (e.g. hopeful, reflective, joyful, upbeat, somber, cinematic), `energy` 1 to 5, `source`, `license`, and `credit` (the attribution line, or null if none needed).
+`FirstNaz Video/music/` on the drive. It manages itself (`music.py`):
+- `./edit music seed`: setup runs this. Downloads a curated starter set of Kevin MacLeod tracks (incompetech.com, CC BY 4.0), pre-tagged by mood and energy. Professional quality, fine on YouTube, Facebook and Instagram with the credit line in the description (the render writes it to `out/music-credit.txt`). Titles that fail to download are skipped.
+- `./edit music fetch MOOD [N]`: grows the library from Openverse, CC0 and CC BY only (no NonCommercial or NoDerivatives), 1.5 to 10 minutes, with a loudness check so wildly dynamic tracks aren't used as beds.
+- `./edit music`: list tracks and how often each was used.
+- `./edit music scan`: if Ben ever drops in his own tracks (e.g. from Pixabay Music or the YouTube Audio Library), this adds them; tag their mood/energy in `library.json`.
 
-Good free sources, safe for church social and YouTube:
-- **Pixabay Music**: no attribution, commercial OK. First choice.
-- **YouTube Audio Library** (YouTube Studio > Audio Library): filter "No attribution required".
-- **Uppbeat** free tier and **Incompetech** (Kevin MacLeod): attribution required, so fill in `credit`.
+When a video is posted with a CC BY track, the credit line must go in the description. Remind Ben in the final message (paste it inline, it's short).
 
 Worship songs are not royalty free. CCLI streaming licenses cover live services, not edited videos with recorded tracks. Don't use them as beds.
 
 ## Setup (once, on the Mac)
 
-With the drive plugged in (use its name from Finder):
+With the drive plugged in, in Terminal:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/benslater01/firstnaz-skills/main/video-edit/setup-mac.sh | bash -s "/Volumes/DRIVE NAME"
+curl -fsSL https://raw.githubusercontent.com/benslater01/firstnaz-skills/main/video-edit/setup-mac.sh | bash
 ```
 
-Installs ffmpeg and Python via Homebrew, makes a private Python env with numpy and mlx-whisper in `~/.firstnaz-video`, downloads the Whisper model (~1.5 GB, one time), clones this repo there, and makes `FirstNaz Video/` (projects, music, the `edit` wrapper) on the drive. Re-run it to update the tools. Then add the drive's `FirstNaz Video` folder as a Remote Control folder in the Claude desktop app to run edits from a cloud session or phone.
+It finds the external drive itself (asks which one if several are plugged in). To force a location, add `-s "/Volumes/DRIVE NAME"` after `bash`.
+
+Installs ffmpeg and Python via Homebrew, makes a private Python env with numpy and mlx-whisper in `~/.firstnaz-video`, downloads the Whisper model (~1.5 GB, one time), clones this repo there, and makes `FirstNaz Video/` (projects, music, the `edit` wrapper) on the drive. Also seeds the music library. Re-run it to update the tools. Then add the drive's `FirstNaz Video` folder as a Remote Control folder in the Claude desktop app to run edits from a cloud session or phone.
 
 ## Defaults when the brief is silent
 

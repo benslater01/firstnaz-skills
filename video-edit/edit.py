@@ -11,7 +11,7 @@ Commands (run from anywhere; PROJECT is a project folder with raw/ and broll/):
   check PROJECT              validate work/plan.json
   render PROJECT [--short] [--preview]
                              build out/final.mp4 (or out/short.mp4) from work/plan.json
-  music [--scan]             list the music library (scan adds new files)
+  music [seed|fetch MOOD|scan|pick MOOD]   self-managing music library (see music.py)
 
 All times in plan.json are MASTER times: seconds on the master angle's clock,
 the same clock as the transcript.
@@ -373,7 +373,9 @@ def check(plan, section, work):
     for b in section.get("broll", []):
         if not Path(b["file"]).exists(): errs.append(f"b-roll missing: {b['file']}")
     m = section.get("music")
-    if m and m.get("file") and not Path(m["file"]).exists(): errs.append(f"music missing: {m['file']}")
+    if m and m.get("file"):
+        mf = Path(m["file"]); mf = mf if mf.is_absolute() else ROOT / "music" / mf
+        if not mf.exists(): errs.append(f"music missing: {m['file']}")
     return errs
 
 
@@ -554,8 +556,14 @@ def cmd_render(project, short=False, preview=False):
         fc.append(f"[{vlab}]subtitles='{esc}'[vs]"); vlab = "vs"
     voice = "[0:a]highpass=f=80" + (",afftdn=nr=8:nf=-40" if plan.get("denoise", True) else "")
     m = sec.get("music")
-    if m and m.get("file"):
-        inputs += ["-stream_loop", "-1", "-ss", f"{m.get('start', 0):.3f}", "-i", Path(m["file"])]
+    credit = None
+    if m and (m.get("file") or m.get("mood")):
+        sys.path.insert(0, str(HERE)); import music
+        music.init(ROOT)
+        mfile, credit = music.resolve(m, total, p.name)
+        save(work / "plan.json", plan)  # pins an auto-picked track so the final matches the preview
+        print(f"  music: {mfile.name}")
+        inputs += ["-stream_loop", "-1", "-ss", f"{m.get('start', 0):.3f}", "-i", mfile]
         fo = m.get("fade_out", 3.0)
         fc.append(voice + ",asplit=2[vo][sc]")
         fc.append(f"[{idx}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{total:.3f},volume={m.get('gain_db', -14)}dB,"
@@ -580,29 +588,17 @@ def cmd_render(project, short=False, preview=False):
     run(["ffmpeg", *inputs, "-filter_complex", ";".join(fc), "-map", f"[{vlab}]", "-map", "[aout]",
          *venc, "-c:a", "aac", "-b:a", "192k", "-t", f"{total:.3f}", final], quiet=False)
     if not preview: shutil.rmtree(tmp)
-    credits = m.get("credit") if m else None
-    if credits:
-        (out / "music-credit.txt").write_text(credits + "\n")
+    if credit and not preview:
+        (out / "music-credit.txt").write_text(credit + "\n")
+    if m and m.get("file") and not preview:
+        music.record_use(Path(m["file"]).name, p.name)
     print(f"\n{final}  ({hms(total)})")
 
 
-# ---------- music library ----------
-def cmd_music(scan=False):
-    lib_dir = ROOT / "music"; lib_dir.mkdir(parents=True, exist_ok=True)
-    lib_path = lib_dir / "library.json"
-    lib = load(lib_path, {"tracks": []})
-    if scan:
-        known = {t["file"] for t in lib["tracks"]}
-        for f in sorted(lib_dir.rglob("*")):
-            if f.suffix.lower() in AUDIO_EXT and f.name not in known and str(f.relative_to(lib_dir)) not in known:
-                d = float(probe(f)["format"]["duration"])
-                lib["tracks"].append({"file": str(f.relative_to(lib_dir)), "title": f.stem, "duration": round(d, 1),
-                                      "mood": [], "energy": None, "source": "", "license": "", "credit": None})
-                print(f"added {f.name}: tag its mood/energy/source in library.json")
-        save(lib_path, lib)
-    for t in lib["tracks"]:
-        print(f"{t['file']:<45} {hms(t.get('duration', 0)):>8}  energy={t.get('energy')}  mood={','.join(t.get('mood', []))}  [{t.get('source')}]")
-    print(f"\n{len(lib['tracks'])} tracks in {lib_path}")
+# ---------- music library (see music.py) ----------
+def cmd_music(args):
+    sys.path.insert(0, str(HERE)); import music
+    music.init(ROOT); music.main(args)
 
 
 if __name__ == "__main__":
@@ -610,7 +606,7 @@ if __name__ == "__main__":
     if not a or a[0] in ("-h", "--help"): sys.exit(__doc__)
     c = a[0]
     if c == "new": cmd_new(a[1])
-    elif c == "music": cmd_music("--scan" in a)
+    elif c == "music": cmd_music(a[1:])
     elif c == "probe": cmd_probe(a[1])
     elif c == "sync": cmd_sync(a[1])
     elif c == "transcribe": cmd_transcribe(a[1])
