@@ -139,6 +139,7 @@ All times are master-clock seconds, the same clock as the transcript.
 - `out/short.mp4`: 1080x1920, -14 LUFS, captions burned in.
 - `*_preview.mp4`: 640x360 / 360x640, fast and rough. For approval only.
 - Audio: high-pass at 80 Hz and light denoise on the voice (`"denoise": false` to skip), then loudness normalized.
+  `"voice": "raw"` at the top of plan.json keeps the voice as recorded: no high-pass or denoise, and loudness comes from one fixed gain (measured in a first pass) plus a fast limiter on the few peaks it pushes past -1.5 dBTP. Use it when the source is already pro audio. (One-pass `loudnorm` rides the level like a compressor, which audibly changes a clean voice.)
 
 ## Music library
 

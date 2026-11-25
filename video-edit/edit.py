@@ -554,7 +554,11 @@ def cmd_render(project, short=False, preview=False):
     if ass:
         esc = str(ass).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
         fc.append(f"[{vlab}]subtitles='{esc}'[vs]"); vlab = "vs"
-    voice = "[0:a]highpass=f=80" + (",afftdn=nr=8:nf=-40" if plan.get("denoise", True) else "")
+    # "voice": "raw" keeps the recorded sound (no high-pass, no denoise); default cleans it up a little
+    raw_voice = plan.get("voice") == "raw"
+    voice = "[0:a]anull" if raw_voice else \
+        "[0:a]highpass=f=80" + (",afftdn=nr=8:nf=-40" if plan.get("denoise", True) else "")
+    afc = []  # audio graph, kept apart so it can be measured on its own
     m = sec.get("music")
     credit = None
     if m and (m.get("file") or m.get("mood")):
@@ -565,20 +569,33 @@ def cmd_render(project, short=False, preview=False):
         print(f"  music: {mfile.name}")
         inputs += ["-stream_loop", "-1", "-ss", f"{m.get('start', 0):.3f}", "-i", mfile]
         fo = m.get("fade_out", 3.0)
-        fc.append(voice + ",asplit=2[vo][sc]")
-        fc.append(f"[{idx}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{total:.3f},volume={m.get('gain_db', -14)}dB,"
-                  f"afade=in:d={m.get('fade_in', 1.5)},afade=out:st={max(0, total - fo):.3f}:d={fo}[mu]")
+        afc.append(voice + ",asplit=2[vo][sc]")
+        afc.append(f"[{idx}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{total:.3f},volume={m.get('gain_db', -14)}dB,"
+                   f"afade=in:d={m.get('fade_in', 1.5)},afade=out:st={max(0, total - fo):.3f}:d={fo}[mu]")
         if m.get("duck", True):
             # music sits under the voice and swells back up in pauses, intro and outro
-            fc.append("[mu][sc]sidechaincompress=threshold=0.015:ratio=8:attack=60:release=900:makeup=1[md]")
+            afc.append("[mu][sc]sidechaincompress=threshold=0.015:ratio=8:attack=60:release=900:makeup=1[md]")
         else:
-            fc.append("[sc]anullsink;[mu]anull[md]")
-        fc.append("[vo][md]amix=inputs=2:normalize=0:duration=first[mx]")
-        alab = "mx"
+            afc.append("[sc]anullsink;[mu]anull[md]")
+        afc.append("[vo][md]amix=inputs=2:normalize=0:duration=first[mx]")
     else:
-        fc.append(voice + "[mx]"); alab = "mx"
+        afc.append(voice + "[mx]")
     lufs = -14 if vertical else -16
-    fc.append(f"[{alab}]loudnorm=I={lufs}:TP=-1.5:LRA=11,aresample=48000[aout]")
+    norm = f"loudnorm=I={lufs}:TP=-1.5:LRA=11"
+    if raw_voice:
+        # two-pass: measure the mix, then apply one fixed gain (linear) so the voice isn't reshaped
+        r = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", *map(str, inputs), "-filter_complex",
+                            ";".join(afc + [f"[mx]{norm}:print_format=json[aout]"]), "-map", "[aout]", "-t", f"{total:.3f}",
+                            "-f", "null", "-"], capture_output=True, text=True)
+        st = json.loads(r.stderr[r.stderr.rfind("{"):r.stderr.rfind("}") + 1])
+        gain = lufs - float(st["input_i"])
+        # one fixed gain; a fast limiter catches only the few peaks it would push past -1.5 dBTP
+        # (loudnorm's own linear mode silently turns dynamic in that case, which reshapes the voice)
+        norm = f"volume={gain:.2f}dB,alimiter=limit=0.84:attack=1:release=50:level=disabled"
+        peaks = float(st["input_tp"]) + gain > -1.5
+        print(f"  loudness: {st['input_i']} LUFS measured, fixed gain {gain:+.1f} dB to {lufs}"
+              + (" (peak limiter catches the loudest moments)" if peaks else ""))
+    fc += afc + [f"[mx]{norm},aresample=48000[aout]"]
     final = out / (f"{tag}.mp4")
     venc = ["-c:v", "libx264", "-preset", "ultrafast" if preview else CONFIG.get("x264_preset", "slow"),
             "-crf", "30" if preview else str(CONFIG.get("crf", 18)), "-pix_fmt", "yuv420p", "-r", str(fps),
