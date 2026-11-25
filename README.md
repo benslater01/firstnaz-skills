@@ -7,6 +7,7 @@ Automations for Mount Vernon First Church of the Nazarene, run by Claude schedul
 | [sermon-notes](sermon-notes/SKILL.md) | Interactive sermon notes at firstnaz.net/sermon-notes | Fri preview, Sat checks, Sun 12:01 AM publish |
 | [weekly-guide](weekly-guide/SKILL.md) | Weekly Guide email to volunteers, leaders and board | Wed proof, Thu/Fri follow-up and send |
 | [announcements](announcements/SKILL.md) | Sunday morning announcements | Tue proposal, Fri final |
+| [video-edit](video-edit/SKILL.md) | Two-angle talking-head edits: sync, color match, cuts, b-roll, music, captions, vertical shorts. Runs on Ben's Mac | On demand |
 
 GitHub Pages serves this repo at https://benslater01.github.io/firstnaz-skills/ (sermon notes widget, Weekly Guide images, announcement Word docs).
 

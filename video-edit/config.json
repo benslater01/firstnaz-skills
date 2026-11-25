@@ -1,0 +1,17 @@
+{
+  "root": "~/FirstNaz Video",
+  "whisper_model": "mlx-community/whisper-large-v3-turbo",
+  "whisper_prompt": "Mount Vernon First Church of the Nazarene. Jesus, Scripture, Gospel, Pastor.",
+  "crf": 18,
+  "x264_preset": "slow",
+  "brand": {
+    "logo": "weekly-guide/img/logo-1n.png",
+    "logo_invert": true,
+    "background": "#111111",
+    "accent": "#ff914d",
+    "caption_font": "Helvetica Neue",
+    "intro_seconds": 3.0,
+    "outro_seconds": 4.0,
+    "outro_text": "firstnaz.net"
+  }
+}
