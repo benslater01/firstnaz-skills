@@ -9,22 +9,23 @@ Ben drops raw camera files in a project folder, gives some creative direction, a
 
 **Everything heavy runs locally on Ben's Mac with free tools** (ffmpeg, numpy, Whisper). Claude never looks at video. Claude reads a text transcript, writes a small `plan.json`, and looks at one contact-sheet image. That keeps each edit to a few cents of Claude usage, and footage never leaves the Mac.
 
-**This repo is public.** Footage, music files and transcripts stay in `~/FirstNaz Video` on the Mac. Never commit them.
+**This repo is public.** Footage, music files and transcripts stay on Ben's external drive. Never commit them.
 
 ## Where it runs
 
-On the Mac, in the folder `~/FirstNaz Video` (made by `setup-mac.sh`). Either:
-- Claude desktop app, a Claude Code session opened on that folder, or
+On the Mac. All project files live on Ben's **external drive**, in `/Volumes/<drive>/FirstNaz Video` (made by `setup-mac.sh`). The tools live on the internal disk in `~/.firstnaz-video` (Python env + a clone of this repo). Either:
+- Claude desktop app, a Claude Code session opened on the drive's `FirstNaz Video` folder, or
 - a cloud session connected to that folder through Remote Control (Claude desktop app: Settings, Claude Code, Remote Control).
 
-If this session is in the cloud and not attached, use `list_computer_folders` / `request_computer_folder` to attach "FirstNaz Video". Don't try to pull footage into the cloud.
+If this session is in the cloud and not attached, use `list_computer_folders` / `request_computer_folder` to attach "FirstNaz Video". Don't try to pull footage into the cloud. If the folder shows offline or `edit` says the drive isn't found, ask Ben to plug in the drive (and open the Claude app); don't fall back to another location.
 
-Run the tool as `./edit <command>` from `~/FirstNaz Video` (a wrapper setup made). In this repo it's `python3 video-edit/edit.py`.
+Run the tool as `./edit <command>` from the drive's `FirstNaz Video` folder. The wrapper points the tool at its own folder, so it keeps working if the drive is renamed. In this repo it's `python3 video-edit/edit.py` (data root from `FIRSTNAZ_VIDEO_ROOT`, else `config.json` `root`).
+
+Drive notes: renders write big temporary files to `work/` on the drive (roughly the size of the finished video, deleted after a final render). Check free space with `df -h .` before a long render. macOS `._` files on exFAT drives are ignored.
 
 ```
-~/FirstNaz Video/
+/Volumes/<drive>/FirstNaz Video/
   edit                      wrapper script
-  firstnaz-skills/          this repo (setup clones it; re-run setup to update)
   music/library.json        royalty-free tracks + tags
   projects/<name>/
     brief.md                Ben's creative direction
@@ -137,7 +138,7 @@ All times are master-clock seconds, the same clock as the transcript.
 
 ## Music library
 
-`~/FirstNaz Video/music/`. Drop tracks in, run `./edit music --scan`, then tag each new entry in `library.json`: `mood` (e.g. hopeful, reflective, joyful, upbeat, somber, cinematic), `energy` 1 to 5, `source`, `license`, and `credit` (the attribution line, or null if none needed).
+`FirstNaz Video/music/` on the drive. Drop tracks in, run `./edit music --scan`, then tag each new entry in `library.json`: `mood` (e.g. hopeful, reflective, joyful, upbeat, somber, cinematic), `energy` 1 to 5, `source`, `license`, and `credit` (the attribution line, or null if none needed).
 
 Good free sources, safe for church social and YouTube:
 - **Pixabay Music**: no attribution, commercial OK. First choice.
@@ -148,11 +149,13 @@ Worship songs are not royalty free. CCLI streaming licenses cover live services,
 
 ## Setup (once, on the Mac)
 
+With the drive plugged in (use its name from Finder):
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/benslater01/firstnaz-skills/main/video-edit/setup-mac.sh | bash
+curl -fsSL https://raw.githubusercontent.com/benslater01/firstnaz-skills/main/video-edit/setup-mac.sh | bash -s "/Volumes/DRIVE NAME"
 ```
 
-Installs ffmpeg and Python via Homebrew, makes a private Python env with numpy and mlx-whisper, downloads the Whisper model (~1.5 GB, one time), and clones this repo into `~/FirstNaz Video`. Re-run it to update. Then add `~/FirstNaz Video` as a Remote Control folder in the Claude desktop app if Ben wants to run edits from a cloud session or his phone.
+Installs ffmpeg and Python via Homebrew, makes a private Python env with numpy and mlx-whisper in `~/.firstnaz-video`, downloads the Whisper model (~1.5 GB, one time), clones this repo there, and makes `FirstNaz Video/` (projects, music, the `edit` wrapper) on the drive. Re-run it to update the tools. Then add the drive's `FirstNaz Video` folder as a Remote Control folder in the Claude desktop app to run edits from a cloud session or phone.
 
 ## Defaults when the brief is silent
 

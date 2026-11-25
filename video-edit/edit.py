@@ -21,7 +21,11 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CONFIG = json.loads((HERE / "config.json").read_text())
-ROOT = Path(os.path.expanduser(CONFIG["root"]))
+# Data root (projects, music). The `edit` wrapper on the drive sets FIRSTNAZ_VIDEO_ROOT to its own folder,
+# so footage lives on the external drive and nothing breaks if the drive is renamed.
+ROOT = Path(os.path.expanduser(os.environ.get("FIRSTNAZ_VIDEO_ROOT") or CONFIG["root"]))
+if str(ROOT).startswith("/Volumes/") and not ROOT.exists():
+    sys.exit(f"{ROOT} not found. Is the external drive plugged in and mounted?")
 VIDEO_EXT = {".mp4", ".mov", ".mxf", ".m4v", ".mts", ".avi", ".mkv"}
 AUDIO_EXT = {".wav", ".mp3", ".m4a", ".aac", ".flac", ".aif", ".aiff"}
 IMAGE_EXT = {".jpg", ".jpeg", ".png", ".heic"}
