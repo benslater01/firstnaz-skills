@@ -43,7 +43,7 @@ def block(title, bullets):
 def proposal(w):
     nh = new_here()
     out = [f"<p>Here are this week's options for Sunday, {long(w['sunday'])}. "
-           "New Here runs every week. Pick up to 2 more.</p>"]
+           "New Here runs every week. Pick up to 2 more, and add your own if you need to (up to 4 total).</p>"]
     if w.get("host"):
         out.append(f"<p><b>Service host:</b> {e(w['host'])}</p>")
     rec = w.get("recommended") or [o["id"] for o in w["options"][:2]]

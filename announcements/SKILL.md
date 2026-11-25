@@ -1,11 +1,11 @@
 ---
 name: announcements
-description: Sunday morning announcements: Tuesday options + proposal to Ben, Friday final (New Here plus up to 2) to Joe, Mark and any alternate service host.
+description: Sunday morning announcements: Tuesday options + proposal to Ben, Friday final (New Here plus up to 2, or up to 3 when Ben adds his own) to Joe, Mark and any alternate service host.
 ---
 
 # Sunday Announcements
 
-Ben Slater (Bslater@firstnaz.net) writes an outlined announcement guide for each Sunday. Every week: **New Here** (permanent, always first) plus **up to 2** more. Ben picks the extras; this automation finds the options, drafts them, and sends the final once he approves.
+Ben Slater (Bslater@firstnaz.net) writes an outlined announcement guide for each Sunday. Every week: **New Here** (permanent, always first) plus **up to 2** more. Ben picks the extras. When Ben manually adds his own announcement(s), the week can go up to **4 total** (New Here plus 3); this automation finds the options, drafts them, and sends the final once he approves.
 
 Read `STYLE.md` before writing a single bullet. Text must sound like a person wrote it: short, punchy, value first, one next step. No em dashes, anywhere (emails included).
 
@@ -63,10 +63,11 @@ On Friday, if a host's email is still unknown: send to Joe and Mark anyway (with
 
 ## Friday: build and send the final (about 12:47 PM and 4:47 PM Eastern)
 1. If `status` is "sent" or "held" for the target Sunday, stop quietly.
+   If `status` is "approved", `final` is already built from Ben's reply (`approvedAt` says when). Use it as is, unless Ben sent a newer email about announcements after `approvedAt`; then apply that. Skip to the recipients step.
 2. Read Ben's replies to the proposal (same subject, from Bslater@firstnaz.net) and any newer email from him about announcements. Only Ben's emails count.
 3. **HOLD / no announcements this week**: set `status: "held"`, send Ben a one-line confirmation, commit, push.
 4. **Ben picked** (e.g. "A and C", "just B", "A plus this: ..."):
-   - `picked` = his choices, at most 2. If he picked more than 2, use his first two and say so in the confirmation.
+   - `picked` = his choices from the options, at most 2. Anything Ben adds himself (his own announcement, not one of the options) also goes in `final`, up to **4 total including New Here**. If the total would go past 4, keep New Here plus the first 3 in the order he wrote them and say so in the confirmation.
    - `final` = those options' title and bullets, with his edits applied exactly. If he wrote his own wording, use it as written (just tidy into bullets; don't "improve" it). If he added something new, write it per STYLE.md.
    - If he answered a flag, fix the bullets to match.
    - If he picked nothing extra ("just New Here"), `final` is empty.

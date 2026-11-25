@@ -1,6 +1,6 @@
 {
   "sunday": "2026-11-29",
-  "status": "proposed",
+  "status": "approved",
   "proposalSentAt": "2026-11-22T16:30:00Z",
   "host": "Jadon Bird (Service Host in Planning Center)",
   "options": [
@@ -32,8 +32,7 @@
         "Grab a tag on your way out, and as long as the gift is back here by Sunday, December 13, it'll make it to that family in time for Christmas."
       ],
       "flags": [
-        "Where are the tags (Connection Center)? I left the location out.",
-        "The newsletter also mentions grocery bags for local students. I left that out to keep it to one ask. Add it if you want."
+        "Answered: tags are on the tree in the lobby; gifts come back to the same tree."
       ]
     },
     {
@@ -73,16 +72,44 @@
   ],
   "notes": [
     "Found the newsletter (from churchoffice@, \"What's Happening at FirstNaz?\"). It's now a weekly source, including when it's in Deleted Items.",
-    "Jadon is Service Host this Sunday. He isn't on the staff page (it doesn't list anyone right now). Is his email jbird@firstnaz.net?",
-    "v3: rewrote everything (including New Here) in fuller, more natural sentences. Ben should reply to the v3 email; also accept replies to v1 or v2."
+    "v3: rewrote everything (including New Here) in fuller, more natural sentences. Ben should reply to the v3 email; also accept replies to v1 or v2.",
+    "Ben replied Nov 25: B, plus his own baptisms (Dec 13, both services, Next Steps form) and the 11:30 break (two services, 8:30 and 10:00 AM, from Dec 13 until the new year).",
+    "Jadon's email is saved in OneDrive announcement-hosts.json."
   ],
-  "picked": [],
-  "final": [],
+  "picked": [
+    "B"
+  ],
+  "final": [
+    {
+      "title": "Turn the Tide Christmas gifts",
+      "bullets": [
+        "There are kids in our community who won't find much under the tree this year unless someone steps in to help.",
+        "We're teaming up with Interchurch's Turn the Tide program, and starting today you'll find gift tags on the tree in the lobby, each with a real child's Christmas wish written on it.",
+        "Grab a tag on your way out, and bring the gift back to that same tree by Sunday, December 13, so it makes it to that family in time for Christmas."
+      ]
+    },
+    {
+      "title": "Baptisms on December 13",
+      "bullets": [
+        "If you've decided to follow Jesus and haven't been baptized yet, this is a great time to take that step with your church family cheering you on.",
+        "We'll be celebrating baptisms in both services on Sunday, December 13, at 8:30 and 10:00.",
+        "If you're ready, or you just want to talk about it, sign up through the Next Steps form using the QR code in front of you."
+      ]
+    },
+    {
+      "title": "Service times through the new year",
+      "bullets": [
+        "Starting Sunday, December 13, the 11:30 service is taking a break until the new year.",
+        "Until then we'll have two services, at 8:30 and 10:00 AM, so if 11:30 is usually your time, plan on joining us at one of those instead."
+      ]
+    }
+  ],
   "sentAt": null,
   "sentTo": [],
   "recommended": [
     "A",
     "B"
   ],
-  "draftUrl": "https://firstnaz2-my.sharepoint.com/personal/bslater_firstnaz_net/_layouts/15/Doc.aspx?sourcedoc=%7B4CBD1516-B032-46CF-AC5A-FF57BA6F234F%7D&file=2026-11-29%20Sunday%20Announcements%20DRAFT.docx&action=default&mobileredirect=true"
+  "draftUrl": "https://firstnaz2-my.sharepoint.com/personal/bslater_firstnaz_net/_layouts/15/Doc.aspx?sourcedoc=%7B4CBD1516-B032-46CF-AC5A-FF57BA6F234F%7D&file=2026-11-29%20Sunday%20Announcements%20DRAFT.docx&action=default&mobileredirect=true",
+  "approvedAt": "2026-11-25T15:09:00Z"
 }
