@@ -17,6 +17,8 @@ Files:
 - `template.docx`: styles from Ben's original Weekly Announcements doc.
 - `docs/<sunday>.docx`: the Word version, served at https://benslater01.github.io/firstnaz-skills/announcements/docs/<sunday>.docx (live once it's on main).
 
+**Service times.** Normally three services. From Sunday, Dec 13, 2026 until the new year there are two: 8:30 and 10:00 AM (the 11:30 is on break). Next Step U classes run after the 2nd and 3rd services when there are three, and only after the 10:00 service when there are two. Check the date before writing class times.
+
 **This repo is public.** Never commit email addresses. Names of staff and the service host are fine.
 
 ## Week file
