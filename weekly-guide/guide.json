@@ -1,7 +1,7 @@
 {
-  "status": "sent",
-  "proofSentAt": null,
-  "sendDate": "2026-11-20",
+  "status": "proofed",
+  "proofSentAt": "2026-11-26T18:50:00Z",
+  "sendDate": "2026-11-27",
   "subject": "FirstNaz Weekly Guide",
   "greeting": "Hi team,",
   "intro": [
@@ -20,8 +20,20 @@
     {
       "date": "2026-12-13",
       "label": "December 13",
+      "title": "Two Services Until the New Year",
+      "detail": "(8:30 & 10:00 AM, the 11:30 service takes a break)"
+    },
+    {
+      "date": "2026-12-13",
+      "label": "December 13",
+      "title": "Baptism Sunday",
+      "detail": "(in both services, sign up through the Next Steps form)"
+    },
+    {
+      "date": "2026-12-13",
+      "label": "December 13",
       "title": "Next Step U: SHAPEd for Ministry",
-      "detail": "(after 2nd & 3rd services)"
+      "detail": "(after the 10:00 service)"
     },
     {
       "date": "2026-12-13",
@@ -58,8 +70,8 @@
     }
   ],
   "sermon": {
-    "title": "Our Confidence is in Christ",
-    "videoId": "Gy8EfI_ZLrE",
+    "title": "The Secret to the Joy Filled Life",
+    "videoId": "YeswnTSNONw",
     "blurb": "Missed Sunday’s message? Catch up anytime and be encouraged by God’s Word. Listen online and stay connected to what God is doing in our church family."
   },
   "footer": [
