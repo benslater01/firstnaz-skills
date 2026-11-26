@@ -263,6 +263,15 @@ def cmd_color(project):
     mf = angle_file(work, plan, master)
     dur = float(probe(mf)["format"]["duration"])
     times = [dur * k / 9 for k in range(1, 9)]
+    kept = [(s["start"], s["end"]) for s in (plan.get("main") or {}).get("segments", [])]
+    if kept:  # once a cut exists, sample only what's kept: false starts and empty frames skew the match
+        total = sum(e - s for s, e in kept)
+        times = []
+        for k in range(1, 9):
+            pos = total * k / 9
+            for s, e in kept:
+                if pos <= e - s: times.append(s + pos); break
+                pos -= e - s
     for ang, a in plan["angles"].items():
         if ang == master: continue
         f = angle_file(work, plan, ang)
