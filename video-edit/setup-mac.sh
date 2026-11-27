@@ -31,8 +31,10 @@ else
 fi
 TOOLS="$HOME/.firstnaz-video"
 mkdir -p "$ROOT/projects" "$ROOT/music" "$TOOLS"
+for b in /opt/homebrew/bin/brew /usr/local/bin/brew; do [ -x "$b" ] && eval "$("$b" shellenv)" && break; done
 command -v brew >/dev/null || { echo "Install Homebrew first: https://brew.sh"; exit 1; }
-brew list ffmpeg >/dev/null 2>&1 || brew install ffmpeg
+# ffmpeg-full (keg-only) has drawtext + libass for outro text, name labels and captions; plain ffmpeg lacks them
+brew list ffmpeg-full >/dev/null 2>&1 || brew install ffmpeg-full
 brew list python@3.12 >/dev/null 2>&1 || brew install python@3.12
 if [ -d "$TOOLS/firstnaz-skills/.git" ]; then git -C "$TOOLS/firstnaz-skills" pull --ff-only
 else git clone https://github.com/benslater01/firstnaz-skills.git "$TOOLS/firstnaz-skills"; fi
@@ -44,6 +46,7 @@ else git clone https://github.com/benslater01/firstnaz-skills.git "$TOOLS/firstn
 cat > "$ROOT/edit" <<'SH'
 #!/bin/bash
 export FIRSTNAZ_VIDEO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+export PATH="/opt/homebrew/opt/ffmpeg-full/bin:/usr/local/opt/ffmpeg-full/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 exec "$HOME/.firstnaz-video/venv/bin/python" "$HOME/.firstnaz-video/firstnaz-skills/video-edit/edit.py" "$@"
 SH
 chmod +x "$ROOT/edit"

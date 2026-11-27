@@ -263,6 +263,15 @@ def cmd_color(project):
     mf = angle_file(work, plan, master)
     dur = float(probe(mf)["format"]["duration"])
     times = [dur * k / 9 for k in range(1, 9)]
+    kept = [(s["start"], s["end"]) for s in (plan.get("main") or {}).get("segments", [])]
+    if kept:  # once a cut exists, sample only what's kept: false starts and empty frames skew the match
+        total = sum(e - s for s, e in kept)
+        times = []
+        for k in range(1, 9):
+            pos = total * k / 9
+            for s, e in kept:
+                if pos <= e - s: times.append(s + pos); break
+                pos -= e - s
     for ang, a in plan["angles"].items():
         if ang == master: continue
         f = angle_file(work, plan, ang)
@@ -487,8 +496,8 @@ def cmd_render(project, short=False, preview=False):
     fps = plan.get("fps", 30)
     tag = f"{key}{'_preview' if preview else ''}"
     tmp = work / f"render_{tag}"
-    if tmp.exists(): shutil.rmtree(tmp)
-    tmp.mkdir()
+    if tmp.exists(): shutil.rmtree(tmp, ignore_errors=True)
+    tmp.mkdir(exist_ok=True)
     # intermediates: near-lossless so the final encode is the only real generation
     enc = ["-c:v", "libx264", "-preset", "ultrafast" if preview else "veryfast", "-crf", "28" if preview else "12",
            "-pix_fmt", "yuv420p", "-r", str(fps)]
@@ -523,7 +532,7 @@ def cmd_render(project, short=False, preview=False):
         print(f"  segment {i+1}/{len(segs)} {ang} {hms(s['start'])}-{hms(s['end'])}", flush=True)
     if outro:
         d = CONFIG["brand"].get("outro_seconds", 4.0)
-        card(tmp / "outro.mov", W, H, fps, d, enc, CONFIG["brand"].get("outro_text")); clips.append(tmp / "outro.mov")
+        card(tmp / "outro.mov", W, H, fps, d, enc, sec.get("outro_text", CONFIG["brand"].get("outro_text"))); clips.append(tmp / "outro.mov")
     lst = tmp / "list.txt"
     lst.write_text("".join(f"file '{c.name}'\n" for c in clips))
     joined = tmp / "joined.mov"
@@ -554,7 +563,11 @@ def cmd_render(project, short=False, preview=False):
     if ass:
         esc = str(ass).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
         fc.append(f"[{vlab}]subtitles='{esc}'[vs]"); vlab = "vs"
-    voice = "[0:a]highpass=f=80" + (",afftdn=nr=8:nf=-40" if plan.get("denoise", True) else "")
+    # "voice": "raw" keeps the recorded sound (no high-pass, no denoise); default cleans it up a little
+    raw_voice = plan.get("voice") == "raw"
+    voice = "[0:a]anull" if raw_voice else \
+        "[0:a]highpass=f=80" + (",afftdn=nr=8:nf=-40" if plan.get("denoise", True) else "")
+    afc = []  # audio graph, kept apart so it can be measured on its own
     m = sec.get("music")
     credit = None
     if m and (m.get("file") or m.get("mood")):
@@ -565,20 +578,33 @@ def cmd_render(project, short=False, preview=False):
         print(f"  music: {mfile.name}")
         inputs += ["-stream_loop", "-1", "-ss", f"{m.get('start', 0):.3f}", "-i", mfile]
         fo = m.get("fade_out", 3.0)
-        fc.append(voice + ",asplit=2[vo][sc]")
-        fc.append(f"[{idx}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{total:.3f},volume={m.get('gain_db', -14)}dB,"
-                  f"afade=in:d={m.get('fade_in', 1.5)},afade=out:st={max(0, total - fo):.3f}:d={fo}[mu]")
+        afc.append(voice + ",asplit=2[vo][sc]")
+        afc.append(f"[{idx}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{total:.3f},volume={m.get('gain_db', -14)}dB,"
+                   f"afade=in:d={m.get('fade_in', 1.5)},afade=out:st={max(0, total - fo):.3f}:d={fo}[mu]")
         if m.get("duck", True):
             # music sits under the voice and swells back up in pauses, intro and outro
-            fc.append("[mu][sc]sidechaincompress=threshold=0.015:ratio=8:attack=60:release=900:makeup=1[md]")
+            afc.append("[mu][sc]sidechaincompress=threshold=0.015:ratio=8:attack=60:release=900:makeup=1[md]")
         else:
-            fc.append("[sc]anullsink;[mu]anull[md]")
-        fc.append("[vo][md]amix=inputs=2:normalize=0:duration=first[mx]")
-        alab = "mx"
+            afc.append("[sc]anullsink;[mu]anull[md]")
+        afc.append("[vo][md]amix=inputs=2:normalize=0:duration=first[mx]")
     else:
-        fc.append(voice + "[mx]"); alab = "mx"
+        afc.append(voice + "[mx]")
     lufs = -14 if vertical else -16
-    fc.append(f"[{alab}]loudnorm=I={lufs}:TP=-1.5:LRA=11,aresample=48000[aout]")
+    norm = f"loudnorm=I={lufs}:TP=-1.5:LRA=11"
+    if raw_voice:
+        # two-pass: measure the mix, then apply one fixed gain (linear) so the voice isn't reshaped
+        r = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", *map(str, inputs), "-filter_complex",
+                            ";".join(afc + [f"[mx]{norm}:print_format=json[aout]"]), "-map", "[aout]", "-t", f"{total:.3f}",
+                            "-f", "null", "-"], capture_output=True, text=True)
+        st = json.loads(r.stderr[r.stderr.rfind("{"):r.stderr.rfind("}") + 1])
+        gain = lufs - float(st["input_i"])
+        # one fixed gain; a fast limiter catches only the few peaks it would push past -1.5 dBTP
+        # (loudnorm's own linear mode silently turns dynamic in that case, which reshapes the voice)
+        norm = f"volume={gain:.2f}dB,alimiter=limit=0.84:attack=1:release=50:level=disabled"
+        peaks = float(st["input_tp"]) + gain > -1.5
+        print(f"  loudness: {st['input_i']} LUFS measured, fixed gain {gain:+.1f} dB to {lufs}"
+              + (" (peak limiter catches the loudest moments)" if peaks else ""))
+    fc += afc + [f"[mx]{norm},aresample=48000[aout]"]
     final = out / (f"{tag}.mp4")
     venc = ["-c:v", "libx264", "-preset", "ultrafast" if preview else CONFIG.get("x264_preset", "slow"),
             "-crf", "30" if preview else str(CONFIG.get("crf", 18)), "-pix_fmt", "yuv420p", "-r", str(fps),
@@ -587,7 +613,7 @@ def cmd_render(project, short=False, preview=False):
         fc.append("[0:v]null[vout]"); vlab = "vout"
     run(["ffmpeg", *inputs, "-filter_complex", ";".join(fc), "-map", f"[{vlab}]", "-map", "[aout]",
          *venc, "-c:a", "aac", "-b:a", "192k", "-t", f"{total:.3f}", final], quiet=False)
-    if not preview: shutil.rmtree(tmp)
+    if not preview: shutil.rmtree(tmp, ignore_errors=True)
     if credit and not preview:
         (out / "music-credit.txt").write_text(credit + "\n")
     if m and m.get("file") and not preview:

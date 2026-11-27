@@ -21,7 +21,7 @@ If this session is in the cloud and not attached, use `list_computer_folders` / 
 
 Run the tool as `./edit <command>` from the drive's `FirstNaz Video` folder. The wrapper points the tool at its own folder, so it keeps working if the drive is renamed. In this repo it's `python3 video-edit/edit.py` (data root from `FIRSTNAZ_VIDEO_ROOT`, else `config.json` `root`).
 
-Drive notes: renders write big temporary files to `work/` on the drive (roughly the size of the finished video, deleted after a final render). Check free space with `df -h .` before a long render. macOS `._` files on exFAT drives are ignored.
+Drive notes: renders write big temporary files to `work/` on the drive (roughly the size of the finished video, deleted after a final render). Check free space with `df -h .` before a long render. macOS `._` files on exFAT drives are ignored (and temp-folder cleanup tolerates them). The `edit` wrapper puts Homebrew's `ffmpeg-full` first on PATH: plain `ffmpeg` has no drawtext/libass, so outro text, name labels and captions would fail.
 
 ```
 /Volumes/<drive>/FirstNaz Video/
@@ -77,7 +77,7 @@ Keep chat short. Ben reads previews, not essays.
 - Use `start` to skip a slow intro in the track.
 - Only tracks whose license allows YouTube, Facebook and Instagram use.
 
-**Intro/outro.** Logo intro (3s) and outro (4s, with "firstnaz.net") when the brief says so. Default: on for YouTube/website, off for Sunday screens and shorts.
+**Intro/outro.** Logo intro (3s) and outro (4s, with "firstnaz.net") when the brief says so. Set `"outro_text": ""` in the `main`/`short` section for a logo-only outro (or any other text to replace it). Default: on for YouTube/website, off for Sunday screens and shorts.
 
 **Name labels.** `lower_thirds` at the speaker's first on-camera moment after the intro, ~5s. Only when the brief gives the name, or Ben confirms the spelling. Never guess a spelling from the transcript.
 
@@ -127,6 +127,7 @@ All times are master-clock seconds, the same clock as the transcript.
 }
 ```
 
+- `fps`: 30 by default. Use `"30000/1001"` for 59.94 or 29.97 fps cameras so no frames are dropped or doubled.
 - `offset`: source time = master time + offset (`sync` fills it in).
 - `color_match`: per channel [gain, offset] on 0 to 255 (`color` fills it in). `adjust`/`look`: brightness -0.1 to 0.1, contrast 0.9 to 1.1, saturation 0.9 to 1.2, gamma, warmth -1 to 1. Stay subtle.
 - `music`: `mood` + `energy` auto-picks; the render adds `file` (relative to `music/`) to pin it. Set `file` yourself only to force a track.
@@ -138,6 +139,7 @@ All times are master-clock seconds, the same clock as the transcript.
 - `out/short.mp4`: 1080x1920, -14 LUFS, captions burned in.
 - `*_preview.mp4`: 640x360 / 360x640, fast and rough. For approval only.
 - Audio: high-pass at 80 Hz and light denoise on the voice (`"denoise": false` to skip), then loudness normalized.
+  `"voice": "raw"` at the top of plan.json keeps the voice as recorded: no high-pass or denoise, and loudness comes from one fixed gain (measured in a first pass) plus a fast limiter on the few peaks it pushes past -1.5 dBTP. Use it when the source is already pro audio. (One-pass `loudnorm` rides the level like a compressor, which audibly changes a clean voice.)
 
 ## Music library
 
